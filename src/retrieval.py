@@ -2,6 +2,12 @@
 Retrieval : recherche sémantique dans la base vectorielle.
 """
 
+import sys
+from pathlib import Path
+
+# Permet d'exécuter ce script directement (python src/retrieval.py) ou comme module
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 from langchain_core.documents import Document
 from langchain_chroma import Chroma
 

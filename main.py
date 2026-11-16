@@ -82,11 +82,22 @@ def ask_question(data: QuestionInput):
     if not data.question.strip():
         raise HTTPException(status_code=400, detail="La question ne peut pas être vide.")
 
-    vectorstore = app_state["vectorstore"]
+    vectorstore = app_state.get("vectorstore")
+    if vectorstore is None:
+        raise HTTPException(status_code=503, detail="Le modèle vectoriel n'est pas encore initialisé.")
 
     chunks = retrieve_relevant_chunks(data.question, vectorstore=vectorstore)
     context = format_context(chunks)
-    answer = generate_answer(data.question, context)
+
+    try:
+        answer = generate_answer(data.question, context)
+    except ValueError as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    except Exception as e:
+        raise HTTPException(
+            status_code=502,
+            detail=f"Erreur lors de la communication avec l'API Groq : {str(e)}"
+        )
 
     sources = sorted(set(chunk.metadata.get("source", "inconnu") for chunk in chunks))
 

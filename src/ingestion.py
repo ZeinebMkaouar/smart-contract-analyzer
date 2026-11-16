@@ -2,7 +2,12 @@
 Ingestion : chargement des smart contracts et découpage en chunks.
 """
 
+import sys
 from pathlib import Path
+
+# Permet d'exécuter ce script directement (python src/ingestion.py) ou comme module
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
 

@@ -3,6 +3,12 @@ Generation : envoie le contexte récupéré + la question à Groq pour générer
 """
 
 import os
+import sys
+from pathlib import Path
+
+# Permet d'exécuter ce script directement (python src/generation.py) ou comme module
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 from dotenv import load_dotenv
 from groq import Groq
 
